@@ -1,14 +1,13 @@
 package org.example.service;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class RateLimiterRunner {
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(10); // 10 permits available per second
+
     public static void main(String[] args) throws InterruptedException {
         /*
          * So here's what's going on in the RateLimiterRunner.
@@ -61,6 +60,7 @@ public class RateLimiterRunner {
         t4.join();
         t5.join();
 
+        RATE_LIMITER.stopRateLimiter();
 
     }
 
@@ -68,8 +68,6 @@ public class RateLimiterRunner {
         RATE_LIMITER.acquire();
         System.out.println(LocalTime.now().truncatedTo(ChronoUnit.SECONDS) + ": " + num);
     }
-
-
 
     private static List<String> getWordsToCheck() {
         return IntStream.range(-100_000, 1_000).mapToObj(i -> String.valueOf(i)).toList();
